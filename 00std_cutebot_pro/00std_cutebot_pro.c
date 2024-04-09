@@ -121,10 +121,18 @@ void i2c_send(uint8_t* buf, uint8_t buflen) {
     NRF_TWI0->TASKS_STOP     = 1;
 }
 
+void delay(int time){
+  int i = 0;
+  time = time * 1000000;
+  while( i < time ){
+    i++;
+  }
+}
+
 int main(void) {
     
     i2c_init();
-
+    //All functions
     // motor left
     i2c_send(I2CBUF_MOTOR_LEFT_FWD,    sizeof(I2CBUF_MOTOR_LEFT_FWD));
     i2c_send(I2CBUF_MOTOR_LEFT_BACK,   sizeof(I2CBUF_MOTOR_LEFT_BACK));
@@ -146,5 +154,28 @@ int main(void) {
     i2c_send(I2CBUF_LED_RIGHT_BLUE,    sizeof(I2CBUF_LED_RIGHT_BLUE));
     i2c_send(I2CBUF_LED_RIGHT_OFF,     sizeof(I2CBUF_LED_RIGHT_OFF));
 
-    while(1);
+    //My Commands
+    //Going forward
+    i2c_send(I2CBUF_MOTOR_LEFT_FWD,    sizeof(I2CBUF_MOTOR_LEFT_FWD));
+    i2c_send(I2CBUF_MOTOR_RIGHT_FWD,   sizeof(I2CBUF_MOTOR_RIGHT_FWD));
+    i2c_send(I2CBUF_LED_LEFT_GREEN,    sizeof(I2CBUF_LED_LEFT_GREEN));
+    i2c_send(I2CBUF_LED_RIGHT_GREEN,   sizeof(I2CBUF_LED_RIGHT_GREEN));
+    delay(20);
+
+    //Turning right
+    i2c_send(I2CBUF_MOTORS_STOP,       sizeof(I2CBUF_MOTORS_STOP));
+    i2c_send(I2CBUF_MOTOR_LEFT_FWD,    sizeof(I2CBUF_MOTOR_LEFT_FWD));
+    i2c_send(I2CBUF_LED_LEFT_OFF,      sizeof(I2CBUF_LED_LEFT_OFF));
+    i2c_send(I2CBUF_LED_RIGHT_BLUE,    sizeof(I2CBUF_LED_RIGHT_BLUE));
+    delay(5);
+    i2c_send(I2CBUF_MOTORS_STOP,       sizeof(I2CBUF_MOTORS_STOP));
+
+    //Going backwards
+    i2c_send(I2CBUF_MOTOR_LEFT_BACK,    sizeof(I2CBUF_MOTOR_LEFT_FWD));
+    i2c_send(I2CBUF_MOTOR_RIGHT_BACK,   sizeof(I2CBUF_MOTOR_RIGHT_FWD));
+    i2c_send(I2CBUF_LED_LEFT_RED,    sizeof(I2CBUF_LED_LEFT_GREEN));
+    i2c_send(I2CBUF_LED_RIGHT_RED,   sizeof(I2CBUF_LED_RIGHT_GREEN));
+    delay(20);
+    i2c_send(I2CBUF_MOTORS_STOP,       sizeof(I2CBUF_MOTORS_STOP));
+    
 }
